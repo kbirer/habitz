@@ -1,11 +1,11 @@
-from typing import List, Optional
+from typing import Optional
 from Common.ActionResult import ActionResult
 from Common.CheckedOutHabit import CheckedOutHabit
 
 
 class CheckedoutHabitResult(ActionResult):
-    CheckedoutHabits: Optional[List[CheckedOutHabit]]
+    CheckedoutHabits: Optional[list[CheckedOutHabit]]
 
-    def __init__(self, success: bool, errorMessage: Optional[str], checkedoutHabits: Optional[List[CheckedOutHabit]]):
+    def __init__(self, success: bool, errorMessage: Optional[str], checkedoutHabits: Optional[list[CheckedOutHabit]]):
         super().__init__(success, errorMessage)
         self.CheckedoutHabits = checkedoutHabits

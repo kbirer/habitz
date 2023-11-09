@@ -30,13 +30,13 @@ class Config():
             if config.has_option(Constants.ConfigurationKeys.StorageSection, Constants.ConfigurationKeys.StorageType):
                 cls.instance.StorageType = storageSection[Constants.ConfigurationKeys.StorageType]
             if config.has_option(Constants.ConfigurationKeys.StorageSection, Constants.ConfigurationKeys.ClearAndSeedData):
-                cls.instance.ClearAndSeedData = bool(
-                    storageSection[Constants.ConfigurationKeys.ClearAndSeedData])
+                cls.instance.ClearAndSeedData = storageSection[
+                    Constants.ConfigurationKeys.ClearAndSeedData] == 'True'
 
             backendClientSection = config[Constants.ConfigurationKeys.BackendClientSection]
             if config.has_option(Constants.ConfigurationKeys.BackendClientSection, Constants.ConfigurationKeys.ClientType):
-                    cls.instance.ClientType = backendClientSection[Constants.ConfigurationKeys.ClientType]
-                                
+                cls.instance.ClientType = backendClientSection[Constants.ConfigurationKeys.ClientType]
+
             cls.instance.Validate()
         return cls.instance
 
@@ -59,4 +59,5 @@ class Config():
             Config.RaiseErrorIfRequired(
                 Constants.ConfigurationKeys.SqliteDbPath, self.SqliteDbPath)
         if self.ClientType != 'InProcess':
-            raise ValueError(f'{Constants.ConfigurationKeys.ClientType} must be InProcess')
+            raise ValueError(
+                f'{Constants.ConfigurationKeys.ClientType} must be InProcess')

@@ -1,12 +1,13 @@
 from datetime import datetime
 import os
-from typing import List, Optional
+from typing import Optional
 from Business.IBackendClient import IBackendClient
 from Common.Config import Config
 from Common.CheckedoutHabitResult import CheckedoutHabitResult
 from Common.Habit import Habit
 from Common.ListHabitResult import ListHabitResult
 from Common.Periodicity import Periodicity
+from Common.SelectHabitResult import SelectHabitResult
 from Storage.IStorage import IStorage
 
 
@@ -49,14 +50,14 @@ class InProcessBackendClient(IBackendClient):
             print(f'An error occured {e}')
             raise e
 
-    def ListCheckedoutHabits(self, startDate: datetime, endDate: datetime, pageIndex: int, pageSize: int) -> CheckedoutHabitResult:
+    def ListCheckedoutHabits(self, startDate: datetime, endDate: datetime) -> CheckedoutHabitResult:
         try:
             startDate = datetime(
                 startDate.year, startDate.month, startDate.day, 0, 0, 0)
             endDate = datetime(endDate.year, endDate.month,
                                endDate.day, 23, 59, 59)
             checkedouts = self._storage.QueryCheckedoutHabits(
-                startDate, endDate, pageIndex, pageSize)
+                startDate, endDate)
             return CheckedoutHabitResult(True, None, checkedouts)
         except BaseException as e:
             # todo log error here and hide it from user
@@ -76,6 +77,15 @@ class InProcessBackendClient(IBackendClient):
             # todo log error here and hide it from user
             print(f'An error occured {e}')
             raise e
+
+    def GetHabitById(self, id: int) -> SelectHabitResult:
+        try:
+            habit = self._storage.GetHabitById(id)
+            return SelectHabitResult(True, '', habit)
+        except BaseException as e:
+            # todo log error here and hide it from user
+            print(f'An error occured {e}')
+            return SelectHabitResult(False, 'Error', None)
 
     def __DeleteFileIfExists(self, path: str) -> None:
         if os.path.exists(path):

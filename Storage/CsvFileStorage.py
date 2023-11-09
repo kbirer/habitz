@@ -7,7 +7,6 @@ from Common.Habit import Habit
 from Common.Periodicity import Periodicity
 from Storage.IStorage import IStorage
 import pandas as pd  # type: ignore
-from paginator import Paginator  # type: ignore
 from Common.TestData import TestData
 
 
@@ -24,53 +23,58 @@ class CsvFileStorage(IStorage):
         lastId = 1
         with open(self._habitDefinitionsCsvFilePath, 'r') as csvFile:
             csvreader = csv.reader(csvFile)
-            list = list(csvreader)
-            if len(list) != 0:
-                lastId = int(list[-1][0])
+            data = list(csvreader)
+            if len(data) != 0:
+                lastId = int(data[-1][0])+1
+            csvFile.close()
 
-        with open(self._habitDefinitionsCsvFilePath, 'w') as csvFile:
+        with open(self._habitDefinitionsCsvFilePath, 'a') as csvFile:
             csvWriter = csv.writer(csvFile)
-            csvWriter.writerow([lastId, description, periodicity, times])
+            s = csvWriter.writerow(
+                [lastId, description, periodicity.value, times])
+            csvFile.close()
         return lastId
 
     def UpdateHabit(self, id: int, description: str, periodicity: Periodicity, times: int) -> None:
-        df = pd.read_csv(self._habitDefinitionsCsvFilePath)
-        rowToUpdate = df.loc[df[Constants.HabitCsvFileColumnIndexes.Id] == id]
-        rowToUpdate[Constants.HabitCsvFileColumnIndexes.Name] = description
-        rowToUpdate[Constants.HabitCsvFileColumnIndexes.Periodicity] = periodicity
-        rowToUpdate[Constants.HabitCsvFileColumnIndexes.Times] = times
-        df.to_csv(self._habitDefinitionsCsvFilePath, index=False)
+        df = pd.read_csv(self._habitDefinitionsCsvFilePath,
+                         header=None, index_col=0)
+        df.at[id, Constants.HabitCsvFileColumnIndexes.Name] = description
+        df.at[id, Constants.HabitCsvFileColumnIndexes.Periodicity] = periodicity.value
+        df.at[id, Constants.HabitCsvFileColumnIndexes.Times] = times
+        df.to_csv(self._habitDefinitionsCsvFilePath, header=None, index=True)
 
     def DeleteHabit(self, id: int) -> None:
-        df = pd.read_csv(self._habitDefinitionsCsvFilePath)
+        df = pd.read_csv(self._habitDefinitionsCsvFilePath, header=None)
         df.drop(df.loc[df[Constants.HabitCsvFileColumnIndexes.Id] == id])
         df.to_csv(self._habitDefinitionsCsvFilePath, index=False)
 
     def CheckoutHabit(self, habitId: int, date: datetime) -> None:
-        with open(self._checkedOutHabitDefinitionsCsvFilePath, 'w') as csvFile:
+        with open(self._checkedOutHabitDefinitionsCsvFilePath, 'a') as csvFile:
             writer = csv.writer(csvFile)
             writer.writerow([habitId, date])
+            csvFile.close()
 
-    def ListHabits(self) -> List[Habit]:
-        result: List[Habit]
+    def ListHabits(self) -> list[Habit]:
+        result = list[Habit]()
         with open(self._habitDefinitionsCsvFilePath, 'r') as csvFile:
             csvreader = csv.reader(csvFile)
             for row in csvreader:
                 result.append(Habit(int(row[Constants.HabitCsvFileColumnIndexes.Id]),
                                     row[Constants.HabitCsvFileColumnIndexes.Name],
-                                    Periodicity[row[Constants.HabitCsvFileColumnIndexes.Periodicity]],
+                                    Periodicity(
+                                        int(row[Constants.HabitCsvFileColumnIndexes.Periodicity])),
                                     int(row[Constants.HabitCsvFileColumnIndexes.Times])))
+            csvFile.close()
         return result
 
-    def QueryCheckedoutHabits(self, start: datetime, end: datetime, pageIndex: int, pageSize: int) -> List[CheckedOutHabit]:
-        result: List[CheckedOutHabit]
-        df = pd.read_csv(self._checkedOutHabitDefinitionsCsvFilePath)
+    def QueryCheckedoutHabits(self, start: datetime, end: datetime) -> list[CheckedOutHabit]:
+        result = list[CheckedOutHabit]()
+        df = pd.read_csv(
+            self._checkedOutHabitDefinitionsCsvFilePath, header=None)
         df[1] = pd.to_datetime(df[1])
         df.sort_values(by=df.columns[1], inplace=True)
         query = df.loc(df[df.columns[1]] <= end & df[df.columns[1]] >= start)
-        paginator = Paginator(query, page=pageIndex, per_page=pageSize)
-        # for page in paginator:
-        # result.append(CheckedOutHabit(page.
+
         return result
 
     def GetHabitById(self, habitId: int) -> Optional[Habit]:
@@ -80,17 +84,22 @@ class CsvFileStorage(IStorage):
                 if int(row[Constants.HabitCsvFileColumnIndexes.Id]) == habitId:
                     return Habit(int(row[Constants.HabitCsvFileColumnIndexes.Id]),
                                  row[Constants.HabitCsvFileColumnIndexes.Name],
-                                 Periodicity[row[Constants.HabitCsvFileColumnIndexes.Periodicity]],
+                                 Periodicity(
+                                     int(row[Constants.HabitCsvFileColumnIndexes.Periodicity])),
                                  int(row[Constants.HabitCsvFileColumnIndexes.Times]))
+            csvFile.close()
             return None
 
     def ClearAndSeedTestData(self) -> None:
         with open(self._habitDefinitionsCsvFilePath, 'w') as csvFile:
             csvwriter = csv.writer(csvFile)
             for habit in TestData.TestHabits:
-                csvwriter.writerow([habit.Id, habit.Description, habit.Periodicity, habit.Times])
+                csvwriter.writerow(
+                    [habit.Id, habit.Description, habit.Periodicity.value, habit.Times])
+            csvFile.close()
 
         with open(self._checkedOutHabitDefinitionsCsvFilePath, 'w') as csvFile:
             csvwriter = csv.writer(csvFile)
             for checkout in TestData.TestCheckouts:
                 csvwriter.writerow([checkout.HabitId, checkout.CreationDate])
+            csvFile.close()

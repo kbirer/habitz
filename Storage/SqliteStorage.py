@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List
 from Common.CheckedOutHabit import CheckedOutHabit
 from Common.Habit import Habit
 from Common.Periodicity import Periodicity
@@ -23,12 +22,12 @@ class SqliteStorage(IStorage):
     def CheckoutHabit(self, habitId: int, date: datetime) -> None:
         pass
 
-    def ListHabits(self) -> List[Habit]:
-        result: List[Habit]
+    def ListHabits(self) -> list[Habit]:
+        result: list[Habit]
         return result
 
-    def QueryCheckedoutHabits(self, start: datetime, end: datetime, pageIndex: int, pageSize: int) -> List[CheckedOutHabit]:
-        result: List[CheckedOutHabit]
+    def QueryCheckedoutHabits(self, start: datetime, end: datetime) -> list[CheckedOutHabit]:
+        result: list[CheckedOutHabit]
         return result
     
     def GetHabitById(self, habitId: int) -> Habit:

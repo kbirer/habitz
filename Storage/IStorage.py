@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional, Protocol
+from typing import Optional, Protocol
 from Common.CheckedOutHabit import CheckedOutHabit
 from Common.Habit import Habit
 from Common.Periodicity import Periodicity
@@ -19,10 +19,10 @@ class IStorage(Protocol):
     def CheckoutHabit(self, habitId: int, date: datetime) -> None:
         pass
 
-    def ListHabits(self) -> List[Habit]:
+    def ListHabits(self) -> list[Habit]:
         pass
 
-    def QueryCheckedoutHabits(self, start: datetime, end: datetime,pageIndex: int, pageSize: int) -> List[CheckedOutHabit]:
+    def QueryCheckedoutHabits(self, start: datetime, end: datetime) -> list[CheckedOutHabit]:
         pass
 
     def ClearAndSeedTestData(self) -> None:

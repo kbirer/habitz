@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, TypeVar, Union
+from typing import TypeVar, Union
 from UI.MultiValueItem import MultiValueItem
 from UI.ValuePicker import ValuePicker
 
@@ -7,9 +7,9 @@ T = TypeVar('T', bound=Union[datetime, int, str], covariant=True)
 
 
 class MultiValuePicker(ValuePicker[T]):
-    _options: List[MultiValueItem[T]]
+    _options: list[MultiValueItem[T]]
 
-    def __init__(self, message, options: List[MultiValueItem[T]]):
+    def __init__(self, message, options: list[MultiValueItem[T]]):
         super().__init__(message)
         if not options or len(options) == 0:
             print('The length of options must be greater than zero')
