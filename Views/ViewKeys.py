@@ -8,4 +8,6 @@ class ViewKeys:
 class MenuKeys:
     UpdateHabit: str = 'UpdateHabit'
     AddNewHabit: str = 'AddNewHabit'
+    CheckOutHabit: str = 'CheckOutHabit'
+    DeleteCheckedOutHabit: str = 'DeleteCheckedOutHabit'
     Back: str = 'Back'

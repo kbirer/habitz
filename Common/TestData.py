@@ -13,9 +13,9 @@ class TestData:
     ]
 
     TestCheckouts: list[CheckedOutHabit] = [
-        CheckedOutHabit(1, datetime(2023, 10, 10, 23, 10, 0)),
-        CheckedOutHabit(1, datetime(2023, 10, 10, 6, 10, 0)),
-        CheckedOutHabit(2, datetime(2023, 10, 5, 6, 10, 0)),
-        CheckedOutHabit(3, datetime(2023, 8, 5, 6, 10, 0)),
-        CheckedOutHabit(4, datetime(2023, 7, 1, 6, 10, 0))
+        CheckedOutHabit(1, 'habit1', datetime(2023, 10, 10, 23, 10, 0)),
+        CheckedOutHabit(1, 'habit2', datetime(2023, 10, 10, 6, 10, 0)),
+        CheckedOutHabit(2, 'habit3', datetime(2023, 10, 5, 6, 10, 0)),
+        CheckedOutHabit(3, 'habit4', datetime(2023, 8, 5, 6, 10, 0)),
+        CheckedOutHabit(4, 'habit5', datetime(2023, 7, 1, 6, 10, 0))
     ]

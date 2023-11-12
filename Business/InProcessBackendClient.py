@@ -52,12 +52,18 @@ class InProcessBackendClient(IBackendClient):
 
     def ListCheckedoutHabits(self, startDate: datetime, endDate: datetime) -> CheckedoutHabitResult:
         try:
-            startDate = datetime(
-                startDate.year, startDate.month, startDate.day, 0, 0, 0)
-            endDate = datetime(endDate.year, endDate.month,
-                               endDate.day, 23, 59, 59)
-            checkedouts = self._storage.QueryCheckedoutHabits(
-                startDate, endDate)
+            startDate = datetime(startDate.year, startDate.month, startDate.day, 0, 0, 0)
+            endDate = datetime(endDate.year, endDate.month,endDate.day, 23, 59, 59)
+            checkedouts = self._storage.QueryCheckedoutHabits(startDate, endDate)
+            listHabitResult=self.ListHabits()
+            if not listHabitResult.Success:
+                habitDictionary:dict={}
+                for habit in listHabitResult.Habits:  # type: ignore
+                    habitDictionary[habit.Id] = habit.Description
+                for checkedoutHabit in checkedouts:
+                    checkedoutHabit.HabitDescription=habitDictionary[checkedoutHabit.HabitId]
+            else:
+                return CheckedoutHabitResult(True, listHabitResult.ErrorMessage, None)
             return CheckedoutHabitResult(True, None, checkedouts)
         except BaseException as e:
             # todo log error here and hide it from user

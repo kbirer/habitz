@@ -69,12 +69,11 @@ class CsvFileStorage(IStorage):
 
     def QueryCheckedoutHabits(self, start: datetime, end: datetime) -> list[CheckedOutHabit]:
         result = list[CheckedOutHabit]()
-        df = pd.read_csv(
-            self._checkedOutHabitDefinitionsCsvFilePath, header=None)
+        df = pd.read_csv(self._checkedOutHabitDefinitionsCsvFilePath, header=None)
         df[1] = pd.to_datetime(df[1])
-        df.sort_values(by=df.columns[1], inplace=True)
-        query = df.loc(df[df.columns[1]] <= end & df[df.columns[1]] >= start)
-
+        query = df[df[1].between(start, end)]
+        for item in query.iterrows():
+            result.append(CheckedOutHabit(item[0],None,item[1]))
         return result
 
     def GetHabitById(self, habitId: int) -> Optional[Habit]:

@@ -1,8 +1,9 @@
+from dataclasses import dataclass
 from typing import Optional
 from Common.ActionResult import ActionResult
 from Common.CheckedOutHabit import CheckedOutHabit
 
-
+@dataclass
 class CheckedoutHabitResult(ActionResult):
     CheckedoutHabits: Optional[list[CheckedOutHabit]]
 
