@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
-from typing import List, Optional
+import os
+from typing import Optional
 from Common.CheckedOutHabit import CheckedOutHabit
 from Common.Constants import Constants
 from Common.Habit import Habit
@@ -71,9 +72,10 @@ class CsvFileStorage(IStorage):
         result = list[CheckedOutHabit]()
         df = pd.read_csv(self._checkedOutHabitDefinitionsCsvFilePath, header=None)
         df[1] = pd.to_datetime(df[1])
-        query = df[df[1].between(start, end)]
-        for item in query.iterrows():
-            result.append(CheckedOutHabit(item[0],None,item[1]))
+        df.set_index(1)
+        query = df.sort_values(df.columns[0]).loc[df[1].between(start, end)]
+        for _,row in query.iterrows():
+            result.append(CheckedOutHabit(row[0],None,row[1]))
         return result
 
     def GetHabitById(self, habitId: int) -> Optional[Habit]:
@@ -90,6 +92,12 @@ class CsvFileStorage(IStorage):
             return None
 
     def ClearAndSeedTestData(self) -> None:
+        dirName=os.path.dirname(self._habitDefinitionsCsvFilePath)
+        if not os.path.isdir(dirName):
+            os.makedirs(dirName)
+        dirName=os.path.dirname(self._checkedOutHabitDefinitionsCsvFilePath)
+        if not os.path.isdir(dirName):
+            os.makedirs(dirName)
         with open(self._habitDefinitionsCsvFilePath, 'w') as csvFile:
             csvwriter = csv.writer(csvFile)
             for habit in TestData.TestHabits:

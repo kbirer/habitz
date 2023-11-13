@@ -1,4 +1,5 @@
 from Views.AddOrUpdateHabitView import AddOrUpdateHabitView
+from Views.CheckoutHabitView import CheckoutHabitView
 from Views.ListCheckedoutHabitsView import ListCheckedoutHabitsView
 from Views.ListHabitsView import ListHabitsView
 from Views.MainView import MainView
@@ -18,6 +19,8 @@ class ViewFactory():
                 return AddOrUpdateHabitView(action)
             case ViewKeys.ListCheckedOutHabits:
                 return ListCheckedoutHabitsView(action)
+            case ViewKeys.CheckOutHabit:
+                return CheckoutHabitView(action)
             case ViewKeys.Main:
                 return MainView()
             case _:

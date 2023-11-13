@@ -3,11 +3,10 @@ class ViewKeys:
     ListHabits: str = 'ListHabits'
     AddOrUpdateHabit: str = 'AddOrUpdateHabit'
     ListCheckedOutHabits: str = 'ListCheckedOutHabits'
+    CheckOutHabit: str = 'CheckOutHabit'
 
 
 class MenuKeys:
     UpdateHabit: str = 'UpdateHabit'
     AddNewHabit: str = 'AddNewHabit'
-    CheckOutHabit: str = 'CheckOutHabit'
-    DeleteCheckedOutHabit: str = 'DeleteCheckedOutHabit'
     Back: str = 'Back'

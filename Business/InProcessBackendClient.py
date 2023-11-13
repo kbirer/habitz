@@ -41,7 +41,7 @@ class InProcessBackendClient(IBackendClient):
         try:
             # check that habit exists
             habit = self._storage.GetHabitById(habitId)
-            if not habit:
+            if habit:
                 self._storage.CheckoutHabit(habitId, date)
             else:
                 raise ValueError('habit not found')
@@ -56,7 +56,7 @@ class InProcessBackendClient(IBackendClient):
             endDate = datetime(endDate.year, endDate.month,endDate.day, 23, 59, 59)
             checkedouts = self._storage.QueryCheckedoutHabits(startDate, endDate)
             listHabitResult=self.ListHabits()
-            if not listHabitResult.Success:
+            if listHabitResult.Success:
                 habitDictionary:dict={}
                 for habit in listHabitResult.Habits:  # type: ignore
                     habitDictionary[habit.Id] = habit.Description

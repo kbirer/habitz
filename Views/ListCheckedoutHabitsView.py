@@ -13,9 +13,7 @@ class ListCheckedoutHabitsView(View):
     ViewId: str = ViewKeys.ListCheckedOutHabits
 
     _menuItems: list[MultiValueItem[str]] = [
-        MultiValueItem[str](MenuKeys.CheckOutHabit, "Checkout habit"),
-        MultiValueItem[str](MenuKeys.DeleteCheckedOutHabit,
-                            "Delete checked out habit"),
+        MultiValueItem[str](ViewKeys.CheckOutHabit, "Checkout habit"),
         MultiValueItem[str](MenuKeys.Back, "Back")
     ]
 
@@ -34,15 +32,13 @@ class ListCheckedoutHabitsView(View):
         result = client.ListCheckedoutHabits(startDate, endDate)
         if not result.Success:
             return ViewAction(self._starterAction.PreviousViewId, MenuKeys.Back)
-        previousHabitId: int
-        line: str = '{:>2} {:<20} {:<20}'
+        previousHabitId=0
         print(f'Checked out fabits for {startDate} and {endDate}')
         for index, checkedoutHabit in enumerate(result.CheckedoutHabits):  # type: ignore
             if previousHabitId != checkedoutHabit.HabitId:
-                print(line.format(index+1, checkedoutHabit.HabitDescription, checkedoutHabit.CreationDate))
+                print(f'{index+1 : <5} { checkedoutHabit.HabitDescription: <40} {checkedoutHabit.CreationDate.strftime("%Y-%m-%d") :>50}')
+                previousHabitId = checkedoutHabit.HabitId
             else:
-                print(line.format('{:>2} {:<20} {:<20}'.format(
-                index+1, '', checkedoutHabit.CreationDate)))
+                print(f'{index+1 : <5} { "": <40} {checkedoutHabit.CreationDate.strftime("%Y-%m-%d") :>50}')
         value = self._mainMenu.PickValue()
-            #if value == MenuKeys.Back:
-        return ViewAction(self._starterAction.PreviousViewId, MenuKeys.Back)
+        return ViewAction(self.ViewId, value)
