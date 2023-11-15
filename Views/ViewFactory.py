@@ -1,5 +1,7 @@
 from Views.AddOrUpdateHabitView import AddOrUpdateHabitView
+from Views.AnalyticsView import AnalyticsView
 from Views.CheckoutHabitView import CheckoutHabitView
+from Views.HabitStreakView import HabitStreakView
 from Views.ListCheckedoutHabitsView import ListCheckedoutHabitsView
 from Views.ListHabitsView import ListHabitsView
 from Views.MainView import MainView
@@ -21,6 +23,10 @@ class ViewFactory():
                 return ListCheckedoutHabitsView(action)
             case ViewKeys.CheckOutHabit:
                 return CheckoutHabitView(action)
+            case ViewKeys.Analytics:
+                return AnalyticsView(action)
+            case ViewKeys.HabitsWithLongestStreak:
+                return HabitStreakView(action)
             case ViewKeys.Main:
                 return MainView()
             case _:

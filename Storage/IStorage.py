@@ -1,7 +1,10 @@
 from datetime import datetime
 from typing import Optional, Protocol
+from pandas import DataFrame # type: ignore
 from Common.CheckedOutHabit import CheckedOutHabit
 from Common.Habit import Habit
+from Common.HabitStreak import HabitStreak
+from Common.HabitStreakResult import HabitStreakResult
 from Common.Periodicity import Periodicity
 
 
@@ -29,4 +32,7 @@ class IStorage(Protocol):
         pass
 
     def GetHabitById(self, habitId: int) -> Optional[Habit]:
+        pass
+
+    def GetHabitStreaks(self, habitId: int, periodicity:Periodicity,times:int) -> int:
         pass

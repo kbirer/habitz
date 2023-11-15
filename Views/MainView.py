@@ -10,7 +10,8 @@ class MainView(View):
     _mainMenuItems: list[MultiValueItem[str]] = [
         MultiValueItem[str](ViewKeys.ListHabits, "List habits"),
         MultiValueItem[str](ViewKeys.ListCheckedOutHabits,"List checked out habits"),
-        MultiValueItem[str](ViewKeys.CheckOutHabit,"Checkout new habit")
+        MultiValueItem[str](ViewKeys.CheckOutHabit,"Checkout new habit"),
+        MultiValueItem[str](ViewKeys.Analytics,"Analytics")
     ]
 
     _mainMenu = MultiValuePicker[str](

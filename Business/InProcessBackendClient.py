@@ -5,6 +5,8 @@ from Business.IBackendClient import IBackendClient
 from Common.Config import Config
 from Common.CheckedoutHabitResult import CheckedoutHabitResult
 from Common.Habit import Habit
+from Common.HabitStreak import HabitStreak
+from Common.HabitStreakResult import HabitStreakResult
 from Common.ListHabitResult import ListHabitResult
 from Common.Periodicity import Periodicity
 from Common.SelectHabitResult import SelectHabitResult
@@ -93,6 +95,33 @@ class InProcessBackendClient(IBackendClient):
             print(f'An error occured {e}')
             return SelectHabitResult(False, 'Error', None)
 
+    def GetAllLongestHabitStreaks(self) -> HabitStreakResult:
+        try:
+            result:HabitStreakResult=HabitStreakResult(True,habitStreaks=[])
+            habits = self._storage.ListHabits()
+            for habit in habits:
+                maxStreak = self._storage.GetHabitStreaks(habit.Id,habit.Periodicity,habit.Times)
+                result.HabitStreaks.append(HabitStreak(habit.Id,habit.Description,maxStreak))# type: ignore
+            return result
+        except BaseException as e:
+            # todo log error here and hide it from user
+            print(f'An error occured {e}')
+            return HabitStreakResult(success=False)
+        
+    def GetLongestHabitStreak(self, habitId: int) -> HabitStreakResult:
+        try:
+            result:HabitStreakResult=HabitStreakResult(True,habitStreaks=[])
+            habit = self._storage.GetHabitById(habitId)
+            if not habit:
+                return HabitStreakResult(False,'Habit not found')
+            maxStreak = self._storage.GetHabitStreaks(habitId,habit.Periodicity,habit.Times)
+            result.HabitStreaks.append(HabitStreak(habit.Id,habit.Description,maxStreak))# type: ignore
+            return result
+        except BaseException as e:
+            # todo log error here and hide it from user
+            print(f'An error occured {e}')
+            return HabitStreakResult(success=False)
+        
     def __DeleteFileIfExists(self, path: str) -> None:
         if os.path.exists(path):
             os.remove(path)

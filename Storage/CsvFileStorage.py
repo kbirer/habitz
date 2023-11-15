@@ -2,12 +2,14 @@ import csv
 from datetime import datetime
 import os
 from typing import Optional
+import pandas  # type: ignore
 from Common.CheckedOutHabit import CheckedOutHabit
 from Common.Constants import Constants
 from Common.Habit import Habit
+from Common.HabitStreak import HabitStreak
 from Common.Periodicity import Periodicity
 from Storage.IStorage import IStorage
-import pandas as pd  # type: ignore
+from pandas import DataFrame  # type: ignore
 from Common.TestData import TestData
 
 
@@ -37,15 +39,15 @@ class CsvFileStorage(IStorage):
         return lastId
 
     def UpdateHabit(self, id: int, description: str, periodicity: Periodicity, times: int) -> None:
-        df = pd.read_csv(self._habitDefinitionsCsvFilePath,
-                         header=None, index_col=0)
+        df = pandas.read_csv(self._habitDefinitionsCsvFilePath,
+                             header=None, index_col=0)
         df.at[id, Constants.HabitCsvFileColumnIndexes.Name] = description
         df.at[id, Constants.HabitCsvFileColumnIndexes.Periodicity] = periodicity.value
         df.at[id, Constants.HabitCsvFileColumnIndexes.Times] = times
         df.to_csv(self._habitDefinitionsCsvFilePath, header=None, index=True)
 
     def DeleteHabit(self, id: int) -> None:
-        df = pd.read_csv(self._habitDefinitionsCsvFilePath, header=None)
+        df = pandas.read_csv(self._habitDefinitionsCsvFilePath, header=None)
         df.drop(df.loc[df[Constants.HabitCsvFileColumnIndexes.Id] == id])
         df.to_csv(self._habitDefinitionsCsvFilePath, index=False)
 
@@ -70,12 +72,13 @@ class CsvFileStorage(IStorage):
 
     def QueryCheckedoutHabits(self, start: datetime, end: datetime) -> list[CheckedOutHabit]:
         result = list[CheckedOutHabit]()
-        df = pd.read_csv(self._checkedOutHabitDefinitionsCsvFilePath, header=None)
-        df[1] = pd.to_datetime(df[1])
+        df = pandas.read_csv(
+            self._checkedOutHabitDefinitionsCsvFilePath, header=None)
+        df[1] = pandas.to_datetime(df[1])
         df.set_index(1)
         query = df.sort_values(df.columns[0]).loc[df[1].between(start, end)]
-        for _,row in query.iterrows():
-            result.append(CheckedOutHabit(row[0],None,row[1]))
+        for _, row in query.iterrows():
+            result.append(CheckedOutHabit(row[0], None, row[1]))
         return result
 
     def GetHabitById(self, habitId: int) -> Optional[Habit]:
@@ -92,10 +95,10 @@ class CsvFileStorage(IStorage):
             return None
 
     def ClearAndSeedTestData(self) -> None:
-        dirName=os.path.dirname(self._habitDefinitionsCsvFilePath)
+        dirName = os.path.dirname(self._habitDefinitionsCsvFilePath)
         if not os.path.isdir(dirName):
             os.makedirs(dirName)
-        dirName=os.path.dirname(self._checkedOutHabitDefinitionsCsvFilePath)
+        dirName = os.path.dirname(self._checkedOutHabitDefinitionsCsvFilePath)
         if not os.path.isdir(dirName):
             os.makedirs(dirName)
         with open(self._habitDefinitionsCsvFilePath, 'w') as csvFile:
@@ -110,3 +113,26 @@ class CsvFileStorage(IStorage):
             for checkout in TestData.TestCheckouts:
                 csvwriter.writerow([checkout.HabitId, checkout.CreationDate])
             csvFile.close()
+
+    def GetHabitStreaks(self, habitId: int, periodicity: Periodicity, times: int) -> int:
+        df = pandas.read_csv(
+            self._checkedOutHabitDefinitionsCsvFilePath, header=None)
+        df[1] = pandas.to_datetime(df[1])
+        match periodicity:
+            case Periodicity.WEEK:
+                df[2] = df[1].dt.isocalendar().week
+            case Periodicity.YEAR:
+                df[2] = df[1].dt.isocalendar().year
+            case Periodicity.DAY:
+                df[2] = df[1].dt.dayofyear
+            case Periodicity.MONTH:
+                df[2] = df[1].dt.month
+        df.set_index([0], inplace=True, drop=False)
+        filteredDf = df[df[0] == habitId]
+        filteredDf = filteredDf.groupby(2).size().to_frame()
+        filteredDf = filteredDf[filteredDf[0] >= times]
+        filteredDf.drop(0,axis=1,inplace=True)
+        filteredDf.reset_index(inplace=True)
+        streaks= (filteredDf[2].diff()!=1).cumsum()
+        result=streaks.map(streaks.value_counts())
+        return result.max()  # type: ignore
