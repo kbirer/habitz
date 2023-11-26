@@ -14,12 +14,26 @@ from Storage.IStorage import IStorage
 
 
 class InProcessBackendClient(IBackendClient):
+    """The backend implementation which runs inside the same process with UI. Implements IBackendClient protocol class"""
     _storage: IStorage
 
     def __init__(self, storage: IStorage):
+        """Constructor
+
+        Parameters:
+
+        storage -- Storage implementation to use"""
         self._storage = storage
 
     def SaveHabit(self, name: str, periodicity: Periodicity, times: int, habitId: Optional[int]) -> None:
+        """Backend function to create or update new habit.
+
+        Parameters:
+
+        name -- Name of the habit.
+        periodicity -- Peridicity of the habit
+        times -- How many times this habit must be completed in given periodicity to achieve a streak
+        habitId -- Storage id of the habit, optional. Zero or none to create a new habit, an integer to update the habit with specified integer"""
         try:
             if not habitId or habitId == 0:
                 self._storage.AddHabit(name, periodicity, times)
@@ -31,6 +45,11 @@ class InProcessBackendClient(IBackendClient):
             raise a
 
     def ListHabits(self) -> ListHabitResult:
+        """Backend function to list habits.
+        
+        Returns:
+        
+        A new instance of ListHabitResult which contains habits to list"""
         try:
             habits = self._storage.ListHabits()
             return ListHabitResult(True, None, habits)
@@ -40,6 +59,12 @@ class InProcessBackendClient(IBackendClient):
             return ListHabitResult(False, 'An error occured', None)
 
     def CheckoutHabit(self, habitId: int, date: datetime) -> None:
+        """Backend function to checkout a new habit.
+        
+        Parameters:
+
+        habitId -- Storage id of habit.
+        date -- Checkout date of the habit"""
         try:
             # check that habit exists
             habit = self._storage.GetHabitById(habitId)
@@ -53,6 +78,15 @@ class InProcessBackendClient(IBackendClient):
             raise e
 
     def ListCheckedoutHabits(self, startDate: datetime, endDate: datetime) -> CheckedoutHabitResult:
+        """Backend function to list checkedout habits. 
+        
+        Parameters:
+        startDate -- Start date which checkout dates must be greater.
+        endDate -- End date which checkout dates must be lesser.
+        
+        Returns:
+
+        A new instance of CheckedoutHabitResult which contains checkedout habits"""
         try:
             startDate = datetime(startDate.year, startDate.month, startDate.day, 0, 0, 0)
             endDate = datetime(endDate.year, endDate.month,endDate.day, 23, 59, 59)
@@ -73,6 +107,7 @@ class InProcessBackendClient(IBackendClient):
             return CheckedoutHabitResult(False, 'an error occured', None)
 
     def ClearAndSeedData(self):
+        """Backend function to clear and create a new test data"""
         try:
             if Config().StorageType == 'csv':
                 self.__DeleteFileIfExists(
@@ -87,6 +122,15 @@ class InProcessBackendClient(IBackendClient):
             raise e
 
     def GetHabitById(self, id: int) -> SelectHabitResult:
+        """Backend function to get information about habit. 
+        
+        Parameters:
+        
+        id -- Storage id of habit to fetch for information
+        
+        Returns:
+
+        A new instance of SelectHabitResult which contains selected habit data"""
         try:
             habit = self._storage.GetHabitById(id)
             return SelectHabitResult(True, '', habit)
@@ -96,6 +140,7 @@ class InProcessBackendClient(IBackendClient):
             return SelectHabitResult(False, 'Error', None)
 
     def GetAllLongestHabitStreaks(self) -> HabitStreakResult:
+        """Backend function to get longest habit streaks."""
         try:
             result:HabitStreakResult=HabitStreakResult(True,habitStreaks=[])
             habits = self._storage.ListHabits()
@@ -109,6 +154,11 @@ class InProcessBackendClient(IBackendClient):
             return HabitStreakResult(success=False)
         
     def GetLongestHabitStreak(self, habitId: int) -> HabitStreakResult:
+        """Backend function to get longest streak of a single habit.
+        
+        Parameters:
+        
+        habitId -- Storage id of habit to fetch for streak information"""
         try:
             result:HabitStreakResult=HabitStreakResult(True,habitStreaks=[])
             habit = self._storage.GetHabitById(habitId)

@@ -8,6 +8,14 @@ from Views.ViewKeys import MenuKeys, ViewKeys
 
 
 class AnalyticsView(View):
+    """Class contains logic for analyzing data to query habit streaks
+    
+    Attributes:
+
+    ViewId -- unique view id string
+    _menuItems -- menu items to select from.
+    _menu -- Input picker to select from _menuıtems
+    """
     ViewId: str = ViewKeys.Analytics
     _menuItems: list[MultiValueItem[str]] = [
         MultiValueItem[str](MenuKeys.HabitsWithLongestStreak,
@@ -20,9 +28,23 @@ class AnalyticsView(View):
         '\nPlease select an option to continue\n', _menuItems)
 
     def __init__(self, starterAction: ViewAction):
+        """Ctor
+        
+        Parameters:
+
+        starterAction -- Action data to use within this view
+        
+        """
         super().__init__(starterAction)
 
     def Action(self) -> ViewAction:
+        """Function to ask user necessary input for displaying streaks of all habits or selected habit
+        
+        Returns:
+
+        View action to navigate
+        
+        """
         selectedOption = self._menu.PickValue()
         if selectedOption == MenuKeys.LongestStreakOfSelectedHabit:
             listHabitResult = BackendClientFactory().CreateBackendClient().ListHabits()

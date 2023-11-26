@@ -7,6 +7,14 @@ from Views.ViewKeys import MenuKeys, ViewKeys
 
 
 class ListHabitsView(View):
+    """Class contains logic for checking out new habit
+    
+    Attributes:
+
+    ViewId -- unique view id string
+    _menuItems -- menu items to select
+    _mainMenu -- input picker to select from _menuItems
+    """
     ViewId: str = ViewKeys.ListHabits
     _menuItems: list[MultiValueItem[str]] = [
         MultiValueItem[str](MenuKeys.AddNewHabit, "New Habit"),
@@ -21,6 +29,13 @@ class ListHabitsView(View):
         super().__init__(starterAction)
 
     def Action(self) -> ViewAction:
+        """Function to ask user necessary input for listing habits and adding new or updating existing habit
+        
+        Returns:
+
+        View action to navigate
+        
+        """
         client = BackendClientFactory().CreateBackendClient()
         result = client.ListHabits()
         if not result.Success:

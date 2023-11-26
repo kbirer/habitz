@@ -8,6 +8,7 @@ from Common.SelectHabitResult import SelectHabitResult
 
 
 class IBackendClient(Protocol):
+    """The protocol class for backend implementations"""
     def SaveHabit(self, name: str, periodicity: Periodicity, times: int, habitId: Optional[int]) -> None:
         pass
 

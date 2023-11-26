@@ -1,19 +1,37 @@
 from Business.BackendClientFactory import BackendClientFactory
 from Common.HabitStreakResult import HabitStreakResult
-from UI.MultiValueItem import MultiValueItem
-from UI.MultiValuePicker import MultiValuePicker
 from Views.View import View
 from Views.ViewAction import ViewAction
 from Views.ViewKeys import ViewKeys
 
 
 class HabitStreakView(View):
+    """Class contains logic for querying habit streaks
+    
+    Attributes:
+
+    ViewId -- unique view id string
+    """
     ViewId = ViewKeys.HabitsWithLongestStreak
 
     def __init__(self, starterAction: ViewAction):
+        """Ctor
+        
+        Parameters:
+
+        starterAction -- Action data to use within this view
+        
+        """
         super().__init__(starterAction)
 
     def Action(self) -> ViewAction:
+        """Function to ask user necessary input for displaying longest streak of habits or selected habit
+        
+        Returns:
+
+        View action to navigate
+        
+        """
         client = BackendClientFactory().CreateBackendClient()
         longestStreaksResult: HabitStreakResult
         if not self._starterAction.Data:

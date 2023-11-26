@@ -11,6 +11,17 @@ from Views.ViewKeys import MenuKeys, ViewKeys
 
 
 class AddOrUpdateHabitView(View):
+    """Class contains logic for updating and adding new habit. Derives from View
+    
+    Attributes:
+
+    ViewId -- unique view id string
+    _periodicityMenu -- Periods to select
+    _textValuePicker -- Input picker for habit name
+    _timesValuePicker -- Input picker for time habit
+    _backendClient -- Backend client
+    """
+
     ViewId: str = ViewKeys.AddOrUpdateHabit
     _periodicityMenu = MultiValuePicker('Please select periodicity', [
         MultiValueItem(1, 'Day'),
@@ -24,9 +35,23 @@ class AddOrUpdateHabitView(View):
     _backendClient=BackendClientFactory().CreateBackendClient()
 
     def __init__(self, starterAction: ViewAction):
+        """Ctor
+        
+        Parameters:
+
+        starterAction -- Action data to use within this view
+        
+        """
         super().__init__(starterAction)
 
     def Action(self) -> ViewAction:
+        """Function to ask user necessary input for adding or updating habit
+        
+        Returns:
+
+        View action to navigate
+        
+        """
         selectedHabitId: int = 0
         client = BackendClientFactory().CreateBackendClient()
         if self._starterAction.Data:

@@ -6,6 +6,14 @@ from Views.ViewKeys import ViewKeys
 
 
 class MainView(View):
+    """Class contains main menu logic
+    
+    Attributes:
+
+    ViewId -- unique view id string
+    _menuItems -- menu items to select
+    _mainMenu -- input picker to select from _menuItems
+    """
     ViewId = ViewKeys.Main
     _mainMenuItems: list[MultiValueItem[str]] = [
         MultiValueItem[str](ViewKeys.ListHabits, "List habits"),

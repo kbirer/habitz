@@ -9,6 +9,7 @@ from Common.Periodicity import Periodicity
 
 
 class IStorage(Protocol):
+    """Protocol class for storage operations"""
 
     def AddHabit(self, description: str, periodicity: Periodicity, times: int) -> int:
         pass

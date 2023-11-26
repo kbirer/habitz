@@ -1,10 +1,19 @@
 import configparser
-from curses.ascii import isspace
 
 from Common.Constants import Constants
 
 
 class Config():
+    """Singleton class for loading configurations. 
+        
+    Attributes:
+
+    StorageType -- Storage type of application.
+    CsvHabitStorageFilePath -- Csv file path for habit definition storage.
+    CsvCheckedOutHabitStorageFilePath -- Csv file path for checked out habit storage.
+    SqliteDbPath -- Sqlite database file path for sqlite storage.
+    ClearAndSeedData -- Clear and create new habit and checkout data
+    ClientType -- Backend client type"""
     StorageType: str = ''
     CsvHabitStorageFilePath: str = ''
     CsvCheckedOutHabitStorageFilePath: str = ''
@@ -13,6 +22,7 @@ class Config():
     ClientType: str = ''
 
     def __new__(cls):
+        """Singleton ctor."""
         if not hasattr(cls, 'instance'):
             cls.instance = super(Config, cls).__new__(cls)
             config = configparser.ConfigParser()
@@ -42,10 +52,12 @@ class Config():
 
     @staticmethod
     def RaiseErrorIfRequired(configKey: str, value: str) -> None:
+        """Checkes and raises ValueError for required configurations."""
         if not value:
             raise ValueError('%s parameter is required' % configKey)
 
     def Validate(self) -> None:
+        """Validates if configuration data is valid."""
         Config.RaiseErrorIfRequired(
             Constants.ConfigurationKeys.StorageType, self.StorageType)
         if self.StorageType != 'csv' and self.StorageType != 'sqlite':

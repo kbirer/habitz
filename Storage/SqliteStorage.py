@@ -10,6 +10,8 @@ from Storage.IStorage import IStorage
 
 
 class SqliteStorage(IStorage):
+    """Class for sqlite storage operations. Implements IStorage protocol class.
+    ToDo: must be implemented for sqlite storage support"""
     def __init__(self):
         pass
 

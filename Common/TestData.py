@@ -5,6 +5,12 @@ from Common.Periodicity import Periodicity
 
 
 class TestData:
+    """Class contains predefined test data 
+        
+    Attributes:
+
+    TestHabits -- Predefined habits
+    TestCheckouts -- Predefined checked out habits"""
     TestHabits: list[Habit] = [
         Habit(1, 'Brush teeth', Periodicity.DAY, 2),
         Habit(2, 'Make a moderate workout', Periodicity.WEEK, 2),

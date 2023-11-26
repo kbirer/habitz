@@ -11,9 +11,17 @@ from Views.ViewKeys import ViewKeys
 
 
 class ViewFactory():
+    """Factory class which resolves view instances from view id"""
     
     @staticmethod
     def NavigateToView(action: ViewAction) -> View:
+        """Function that resolves view to navigate
+        
+        Parameters:
+
+        action -- next view to navigate
+        
+        """
         match action.NextViewId:
             case ViewKeys.ListHabits:
                 return ListHabitsView(action)

@@ -5,4 +5,9 @@ from Common.Habit import Habit
 
 @dataclass
 class SelectHabitResult(ActionResult):
+    """Data class for retrieving selected habit. Derives from ActionResult 
+        
+    Attributes:
+        
+    SelectedHabit -- Selected habit"""
     SelectedHabit:Optional[Habit]
