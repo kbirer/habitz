@@ -1,3 +1,6 @@
 *.pyc
 Data/*.csv
 .venv
+.vscode
+.pytest_cache
+.DS_Store
