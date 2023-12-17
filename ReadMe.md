@@ -31,5 +31,5 @@ This application uses a configuration file located in config.ini file to work ac
 **Known Issues:**<br>
 1. Sqlite or other rdms implementations should be implemented for faster performance.<br>
 2. Pandas utilization should be improved for faster csv implementation.<br>
-3. Unit tests should run flawlesly without having each of them run in a seperate process. Somehow mocking **configparser.open** keeping previous tests return value on the next test and causes it to fail. But there're 16 tests and creating 16 workers while running pytest or running.<br>
-4. Layered architecture should be implemented for seperation of concerns and better maintenance.<br>
+3. Unit tests should run flawlesly without having each of them run in a seperate process. Somehow mocking **configparser.open** keeping previous tests return value on the next test and causes it to fail. But there're 16 tests and creating 16 workers while running pytest runs tests without error.<br>
+4. Backend can be implemented as an api layer for scaling the application.<br>
