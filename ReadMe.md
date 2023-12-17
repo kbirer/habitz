@@ -23,7 +23,7 @@ This application uses a configuration file located in config.ini file to work ac
     b. **CsvHabitStorageFilePath**: Csv storage file path to store habits. Default value is **Data/HabitDefinitions.csv** which is under Data folder of application's root folder.<br>
     c. **CsvCheckedOutHabitStorageFilePath**: Csv storage file path to store checkedout habits. Default value is **Data/CheckedoutHabits.csv** which is under Data folder of application's root folder.<br>
     d. **SqliteDbPath**: Not used since only csv storage type is supported for now.<br>
-    e. **ClearAndSeedData**: A boolean value (True or Dalse) which clears the storage (files in **CsvHabitStorageFilePath** and **CsvCheckedOutHabitStorageFilePath** configuration values) and creates new storage based on hardcoded test data. Warning if you enter, modify data, exit the application and leave this field to True then when you run application again, your data will be erased and default test data will be recreated again. Don't forget to set this field to False to avoid your data erased.<br>
+    e. **ClearAndSeedData**: A boolean value (True or False) which clears the storage (files in **CsvHabitStorageFilePath** and **CsvCheckedOutHabitStorageFilePath** configuration values) and creates new storage based on hardcoded test data. Warning if you enter, modify data, exit the application and leave this field to True then when you run application again, your data will be erased and default test data will be recreated again. Don't forget to set this field to False to avoid your data erased.<br>
    
 3. **BACKEND_CLIENT** Section:<br>
     a. **ClientType**: Specifies the backend client used by ui layer. Only **InProcess** backend client is available for now.<br>
