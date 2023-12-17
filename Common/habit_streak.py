@@ -9,6 +9,6 @@ class HabitStreak():
     HabitId -- Storage id of habit
     HabitName -- Description of habit
     StreakCount -- Number of streaks"""
-    HabitId:int
-    HabitName:str
-    StreakCount:int
+    habit_id:int
+    habit_name:str
+    streak_count:int

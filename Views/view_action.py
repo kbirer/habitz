@@ -12,6 +12,6 @@ class ViewAction:
     NextViewId -- next view id to navigate
     Data -- additional data for usage within next view if necessary
     """
-    PreviousViewId: str
-    NextViewId: str
-    Data: Any = None
+    previous_view_id: str
+    next_view_id: str
+    data: Any = None

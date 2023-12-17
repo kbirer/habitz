@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
-from Common.ActionResult import ActionResult
-from Common.CheckedOutHabit import CheckedOutHabit
+from common.action_result import ActionResult
+from common.checked_out_habit import CheckedOutHabit
 
 @dataclass
 class CheckedoutHabitResult(ActionResult):
@@ -10,9 +10,10 @@ class CheckedoutHabitResult(ActionResult):
     Attributes:
 
     CheckedoutHabits -- List of Checkedout habits"""
-    CheckedoutHabits: Optional[list[CheckedOutHabit]]
+    checkedout_habits: Optional[list[CheckedOutHabit]]
 
-    def __init__(self, success: bool, errorMessage: Optional[str], checkedoutHabits: Optional[list[CheckedOutHabit]]):
+    def __init__(self, success: bool, 
+                 error_message: Optional[str], checkedout_habits: Optional[list[CheckedOutHabit]]):
         """Constructor
 
         Parameters:
@@ -20,5 +21,5 @@ class CheckedoutHabitResult(ActionResult):
         success -- Indicated backend operation is successful
         errorMessage -- Contains error message if backend operation is unsuccessfull
         checkedoutHabits -- List of Checkedout habits"""
-        super().__init__(success, errorMessage)
-        self.CheckedoutHabits = checkedoutHabits
+        super().__init__(success, error_message)
+        self.checkedout_habits = checkedout_habits

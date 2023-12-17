@@ -1,7 +1,7 @@
 
 from abc import abstractmethod
 from typing import Protocol
-from Views.ViewAction import ViewAction
+from views.view_action import ViewAction
 
 
 class View(Protocol):
@@ -12,20 +12,20 @@ class View(Protocol):
     ViewId -- unique view id string
     _starterAction -- The action which this view is called with
     """
-    ViewId: str
-    _starterAction: ViewAction
+    view_id: str
+    _starter_action: ViewAction
 
-    def __init__(self, starterAction: ViewAction):
+    def __init__(self, starter_action: ViewAction):
         """Ctor
         
         Parameters:
 
         starterAction -- The action which this view is called with
         """
-        self._starterAction = starterAction
+        self._starter_action = starter_action
 
     @abstractmethod
-    def Action(self) -> ViewAction:
+    def action(self) -> ViewAction:
         """Function that runs view logic
         
         Returns:

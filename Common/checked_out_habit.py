@@ -11,6 +11,6 @@ class CheckedOutHabit():
     HabitId -- Storage id of habit
     HabitDescription -- Description of habit
     CreationDate -- Checkout date of habit"""
-    HabitId: int
-    HabitDescription:Optional[str]
-    CreationDate: datetime
+    habit_id: int
+    habit_description:Optional[str]
+    creation_date: datetime

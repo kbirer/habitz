@@ -1,39 +1,42 @@
 from datetime import datetime
 from typing import Optional, Protocol
-from pandas import DataFrame # type: ignore
-from Common.CheckedOutHabit import CheckedOutHabit
-from Common.Habit import Habit
-from Common.HabitStreak import HabitStreak
-from Common.HabitStreakResult import HabitStreakResult
-from Common.Periodicity import Periodicity
+from common.checked_out_habit import CheckedOutHabit
+from common.habit import Habit
+from common.periodicity import Periodicity
 
 
 class IStorage(Protocol):
     """Protocol class for storage operations"""
 
-    def AddHabit(self, description: str, periodicity: Periodicity, times: int) -> int:
+    def add_habit(self, description: str,
+                  periodicity: Periodicity, times: int) -> int:
         pass
 
-    def UpdateHabit(self, id: int, description: str, periodicity: Periodicity, times: int) -> None:
+    def update_habit(self, id: int,
+                     description: str, periodicity: Periodicity,
+                     times: int) -> None:
         pass
 
-    def DeleteHabit(self, id: int) -> None:
+    def delete_habit(self, id: int) -> None:
         pass
 
-    def CheckoutHabit(self, habitId: int, date: datetime) -> None:
+    def checkout_habit(self, habit_id: int,
+                       date: datetime) -> None:
         pass
 
-    def ListHabits(self) -> list[Habit]:
+    def list_habits(self) -> list[Habit]:
         pass
 
-    def QueryCheckedoutHabits(self, start: datetime, end: datetime) -> list[CheckedOutHabit]:
+    def query_checkedout_habits(self, start: datetime,
+                                end: datetime) -> list[CheckedOutHabit]:
         pass
 
-    def ClearAndSeedTestData(self) -> None:
+    def clear_and_seed_test_data(self) -> None:
         pass
 
-    def GetHabitById(self, habitId: int) -> Optional[Habit]:
+    def get_habit_by_id(self, habit_id: int) -> Optional[Habit]:
         pass
 
-    def GetHabitStreaks(self, habitId: int, periodicity:Periodicity,times:int) -> int:
+    def get_habit_streaks(self, habit_id: int,
+                          periodicity: Periodicity, times: int) -> int:
         pass

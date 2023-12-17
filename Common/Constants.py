@@ -6,8 +6,8 @@ class Constants():
 
     ConfigFilePath -- Path to configuration file
     DatePickerFormat -- format of application wide dates"""
-    ConfigFilePath: str = 'config.ini'
-    DatePickerFormat: str = '%d/%m/%Y'
+    config_file_path: str = 'config.ini'
+    date_picker_format: str = '%d/%m/%Y'
 
     class ConfigurationKeys():
         """Inner class to contain compile time constants of configuration keys. 
@@ -22,14 +22,14 @@ class Constants():
         ClearAndSeedData -- Configuration key for enabling clearing and seeding data
         SqliteDbPath -- Configuration key for sqlite db path
         ClientType -- Configuration key for backend client type"""
-        StorageSection: str = 'DATA_STORAGE'
-        BackendClientSection: str = 'BACKEND_CLIENT'
-        StorageType: str = 'StorageType'
-        CsvHabitStorageFilePath: str = 'CsvHabitStorageFilePath'
-        CsvCheckedOutHabitStorageFilePath: str = 'CsvCheckedOutHabitStorageFilePath'
-        ClearAndSeedData: str = 'ClearAndSeedData'
-        SqliteDbPath: str = 'SqliteDbPath'
-        ClientType: str = 'ClientType'
+        storage_section: str = 'DATA_STORAGE'
+        backend_client_section: str = 'BACKEND_CLIENT'
+        storage_type: str = 'StorageType'
+        csv_habit_storage_file_path: str = 'CsvHabitStorageFilePath'
+        csv_checked_out_habit_storage_file_path: str = 'CsvCheckedOutHabitStorageFilePath'
+        clear_and_seed_data: str = 'ClearAndSeedData'
+        sqlite_db_path: str = 'SqliteDbPath'
+        client_type: str = 'ClientType'
         
     class HabitCsvFileColumnIndexes():
         """Inner class to contain compile time constants of habits csv file column indexes. 
@@ -40,7 +40,7 @@ class Constants():
         Name -- Index for name field of habit data
         Periodicity -- Index for periodicity field of habit data
         Times -- Index for times field of habit data"""
-        Id: int = 0
-        Name: int = 1
-        Periodicity: int = 2
-        Times: int = 3
+        id: int = 0
+        name: int = 1
+        periodicity: int = 2
+        times: int = 3

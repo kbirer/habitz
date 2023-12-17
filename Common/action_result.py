@@ -10,5 +10,5 @@ class ActionResult:
         
     Success -- Indicated backend operation is successful
     ErrorMessage -- Contains error message if backend operation is unsuccessfull"""
-    Success: bool
-    ErrorMessage: Optional[str]
+    success: bool
+    error_message: Optional[str]

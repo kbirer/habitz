@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TypeVar, Union
-from UI.MultiValueItem import MultiValueItem
-from UI.ValuePicker import ValuePicker
+from ui.multi_value_item import MultiValueItem
+from ui.value_picker import ValuePicker
 
 T = TypeVar('T', bound=Union[datetime, int, str], covariant=True)
 
@@ -15,7 +15,8 @@ class MultiValuePicker(ValuePicker[T]):
     """
     _options: list[MultiValueItem[T]]
 
-    def __init__(self, message:str, options: list[MultiValueItem[T]]):
+    def __init__(self, message:str, 
+                 options: list[MultiValueItem[T]]):
         """Ctor.
 
         Parameters:
@@ -36,12 +37,12 @@ class MultiValuePicker(ValuePicker[T]):
         
         The value of the selected option.
         """
-        print(self._inputMessage)
+        print(self._input_message)
         for index, item in enumerate(self._options):
             print(f'{index+1} - {item._description}')
         return super().PickValue()
 
-    def _ConvertValue(self, input: str) -> T:
+    def _convert_value(self, input: str) -> T:
         """Implementation of abstract function to convert user input to selected option
 
         Parameters:
@@ -57,5 +58,5 @@ class MultiValuePicker(ValuePicker[T]):
             print('The index must be between {0} and {1}'.format(
                 1, len(self._options)))
             raise Exception()
-        selectedOption = self._options[result-1]
-        return selectedOption._id
+        selected_option = self._options[result-1]
+        return selected_option._id
